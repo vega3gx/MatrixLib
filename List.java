@@ -1,9 +1,7 @@
  // #------------------------------------------------------------------------------
  // # Aaron Wood
- // # aamwood
- // # CS 101 
  // # 5/13/2019
- // # Defines all variables and functions for List ADT
+ // # Defines all variables and functions for List 
  // #------------------------------------------------------------------------------
 
 
@@ -21,6 +19,9 @@ public class List {
             prev = null;
         }
 
+		//determines if nodes are equal
+		//only use of object node contains is primative
+		//will return false if not primative, 
         public boolean equals(Object x){
             boolean eq = false;
             Node that;
@@ -35,7 +36,7 @@ public class List {
    // Fields for the List class
     private Node head;
     private Node tail;
-    private Node cursor;   
+    private Node cursor;   //cursor can point to one particular object in list
     private int numItems;  // number of items in this List
 
    // constructor for the List class
@@ -56,18 +57,26 @@ public class List {
         return(numItems);
     }
 
+	//public functions --------------------------------------------------------
+
     //index()
     //pre: none
     //returns the index of the current cursor
-    //if cursor is undefined, returns null
+    //if cursor undefined, returns -1
     public int index(){
-        if(cursor==null){return(-1);}
+        if(cursor==null){
+        	return(-1);
+        }
         else{
             int i;
             Node N = head;
-            for(i=0;N!=cursor;i++){ //step through until N==curson
-                if(N.next!=null){N=N.next;}
-                else{return(-1);}
+            for(i=0;N!=cursor;i++){ //step through until Node N==cursor
+                if(N.next!=null){
+                	N=N.next;
+                }
+                else{
+                	return(-1);
+                }
             }
             return(i);
         }
@@ -78,9 +87,11 @@ public class List {
     //returns value of front item
     public Object front(){
         if(head==null){
-            throw new RuntimeException("List Error: front() called on empty list");
-            }
-        else{return(head.value);}
+        	throw new RuntimeException("List Error: front() called on empty list");
+        }
+        else{
+        	return(head.value);
+        }
     }
 
     //back()
@@ -88,9 +99,11 @@ public class List {
     //returns value of back item
     public Object back(){
         if(tail==null){
-            throw new RuntimeException("List Error: back() called on empty list");
-            }
-        else{return(tail.value);}
+        	throw new RuntimeException("List Error: back() called on empty list");
+        }
+        else{
+        	return(tail.value);
+        }
     }
 
     //get()
@@ -103,12 +116,15 @@ public class List {
         else if(cursor==null){
             throw new RuntimeException("List Error: get() called on undefined cursor");
         }
-        else{return(cursor.value);}
+        else{
+        	return(cursor.value);
+        }
     }
 
     //equals()
     //pre: none
     //returns true if both lists are identical
+    //only use if list nodes contain primatives
     public boolean equals(Object x){
         boolean eq  = false;
         List L;
@@ -118,17 +134,18 @@ public class List {
             L = (List)x;
             N = this.head;
             M = L.head;
-            eq = (this.numItems==L.numItems);
+            eq = (this.numItems==L.numItems); //if lists have different lengths, they are not equal
             while( eq && N!=null ){
-                eq = N.equals(M);
+                eq = N.equals(M);		//uses Node equals() function, returns false if values are not primatives
                 N = N.next;
                 M = M.next;
+                //step through both lists comparing values, quit if false
             }
         }
         return eq;
     }
 
-    //equals()
+    //clear()
     //pre: none
     //empties out all contents of list
     public void clear(){
@@ -161,16 +178,16 @@ public class List {
    // inserts new item into end of list
    // pre: none
     public void append(Object value){
-    if(numItems==0){    //if only one value exists
+    if(numItems==0){    //if no nodes in list
         head = new Node(value);
-        tail = head; //set head if list hasn't been created yet
+        tail = head; //if only one node exists, node is both head and tail
         numItems++;
     }else{   
         Node N = new Node(value);
         Node E = tail;
-        E.next = N;
-        N.prev = E; //place new node at end of list
-        tail = N;
+        E.next = N;		//previous tail node points to new node
+        N.prev = E; 	//place new node at end of list
+        tail = N;		//new node is now tail
         numItems++;
         }
     }
@@ -179,16 +196,16 @@ public class List {
    // inserts new item into beginning of list
    // pre: none
     public void prepend(Object value){
-    if(numItems==0){
+    if(numItems==0){		//if no nodes in list
         head = new Node(value);
         tail = head; //set head if list hasn't been created yet
         numItems++;
-    }else{   //only do anything if no matching key found
+    }else{  
         Node N = new Node(value);
         Node E = head;
-        N.next = E;
+        N.next = E;		//new next points to previous head
         E.prev = N; //place new node at end of list
-        head = N;
+        head = N;		//new node is now head
         numItems++;
         }
     }
@@ -201,17 +218,17 @@ public class List {
             }
         else if(cursor==null){
             throw new RuntimeException("List Error: insertBefore() called on undefined cursor");
-        }else if(cursor==head){
+        }else if(cursor==head){		//basically prepend
             Node N = new Node(data);
             Node E = head;
             N.next = E;
-            E.prev = N; //place new node at end of list
+            E.prev = N;
             head = N;
             numItems++;
         }else{
             Node N = new Node(data);
             Node P = cursor.prev;
-            cursor.prev=N;
+            cursor.prev=N;		//place Node N between cursor and previous node
             P.next=N;
             N.next=cursor;
             N.prev=P;
@@ -228,17 +245,17 @@ public class List {
             }
         else if(cursor==null){
             throw new RuntimeException("List Error: insertAfter() called on undefined cursor");
-        }else if(cursor == tail){
+        }else if(cursor == tail){		//basically apend
             Node N = new Node(data);
             Node E = tail;
             E.next = N;
-            N.prev = E; //place new node at end of list
+            N.prev = E; 
             tail = N;
             numItems++;
         }else{
             Node N = new Node(data);
             Node A = cursor.next;
-            cursor.next=N;
+            cursor.next=N;		//place Node N after cursor
             A.prev=N;
             N.prev=cursor;
             N.next=A;
@@ -250,14 +267,18 @@ public class List {
     //pre: none
     //moves cursor to previous element
     public void movePrev(){
-        if(cursor!=null){cursor=cursor.prev;}
+        if(cursor!=null){
+        	cursor=cursor.prev;
+        }
     }
 
     //moveNext()
     //pre: none
     //moves cursor to next element
     public void moveNext(){
-        if(cursor!=null){cursor=cursor.next;}
+        if(cursor!=null){
+        	cursor=cursor.next;
+        }
     }
     // delete()
     // deletes element pointed to by cursor
@@ -269,24 +290,24 @@ public class List {
         else if(cursor==null){
             throw new RuntimeException("List Error: delete() called on undefined cursor");
         }
-        else if(numItems==1){
+        else if(numItems==1){		//basically clear
             head =null;
             tail = null;
             cursor = null;
             numItems = 0;
-        }else if(cursor==head){
+        }else if(cursor==head){		//basically deletefront
             head=head.next;
             head.prev=null;
             numItems--;
             cursor=null;
         }
-        else if(cursor == tail){
+        else if(cursor == tail){		//basically deleteback
             tail=tail.prev;
             tail.next=null;
             numItems--;
             cursor=null;
         }else{
-            Node N = cursor.next;
+            Node N = cursor.next;		//remove all pointers to cursor
             Node P = cursor.prev;
             P.next=N;
             N.prev=P;
@@ -302,11 +323,15 @@ public class List {
         if(head==null){
             throw new RuntimeException("List Error: deleteFront() called on empty list");
         }
-        if(head==cursor){cursor=null;}
+        if(head==cursor){
+        	cursor=null;
+        }
         head=head.next;
         numItems--;
-        if(numItems!=0){head.prev=null;}
-        else{
+        if(numItems!=0){		//delete head by removing pointer to it
+        	head.prev=null;
+        }
+        else{		//basically clear
             head =null;
             tail = null;
             cursor = null;
@@ -321,11 +346,15 @@ public class List {
         if(head==null){
             throw new RuntimeException("List Error: deleteBack() called on empty list");
         }
-        if(tail==cursor){cursor=null;}
+        if(tail==cursor){
+        	cursor=null;
+        }
         tail=tail.prev;
         numItems--;
-        if(numItems!=0){tail.next=null;}
-        else{
+        if(numItems!=0){
+        	tail.next=null;		//delete tail by removing pointer to it
+        }
+        else{		//basically clear
             head =null;
             tail = null;
             cursor = null;
@@ -336,31 +365,20 @@ public class List {
     //copy()
     //pre: none
     //returns refrence to identical list
+    //only use on primatives, DOES NOT WORK WITH COMPLEX OBJECTS
+    //if used with object, both lists will contain pointers to same object
     List copy(){
         List Copy = new List();
-        if(this.numItems==0){return(Copy);}
+        if(this.numItems==0){
+        	return(Copy);		//made a copy of an empty list
+        }
         this.moveFront();
         while(this.index()!=-1){
-            Copy.append(this.get());
+            Copy.append(this.get());		//copy primative
             this.moveNext();
         }
         return(Copy);
     }
-
-    // //changeValue()
-    // //changes value of cursor
-    // //pre: index()!=1 
-    // public changeValue(Object C){
-    //     if(head==null){
-    //         throw new RuntimeException("List Error: changeValue() called on empty list");
-    //     }
-    //     else if(cursor==null){
-    //         throw new RuntimeException("List Error: changeValue() called on undefined cursor");
-    //     }
-    //     Node N = cursor;
-    //     N.value = C;
-    // }
-
 
     // toString()
     // returns a String representation of this Dictionary
@@ -375,7 +393,6 @@ public class List {
                 N=N.next;
             }
             returnVal=returnVal+(N.value+" ");
-            //returnVal=returnVal+"\n";
             return(returnVal);
         }else{
             return("");
