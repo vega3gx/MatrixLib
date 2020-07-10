@@ -218,13 +218,8 @@ public class List {
             }
         else if(cursor==null){
             throw new RuntimeException("List Error: insertBefore() called on undefined cursor");
-        }else if(cursor==head){		//basically prepend
-            Node N = new Node(data);
-            Node E = head;
-            N.next = E;
-            E.prev = N;
-            head = N;
-            numItems++;
+        }else if(cursor==head){
+        	this.prepend(data);
         }else{
             Node N = new Node(data);
             Node P = cursor.prev;
@@ -245,13 +240,8 @@ public class List {
             }
         else if(cursor==null){
             throw new RuntimeException("List Error: insertAfter() called on undefined cursor");
-        }else if(cursor == tail){		//basically apend
-            Node N = new Node(data);
-            Node E = tail;
-            E.next = N;
-            N.prev = E; 
-            tail = N;
-            numItems++;
+        }else if(cursor == tail){
+            this.append(data);
         }else{
             Node N = new Node(data);
             Node A = cursor.next;
@@ -290,22 +280,13 @@ public class List {
         else if(cursor==null){
             throw new RuntimeException("List Error: delete() called on undefined cursor");
         }
-        else if(numItems==1){		//basically clear
-            head =null;
-            tail = null;
-            cursor = null;
-            numItems = 0;
-        }else if(cursor==head){		//basically deletefront
-            head=head.next;
-            head.prev=null;
-            numItems--;
-            cursor=null;
+        else if(numItems==1){
+            this.clear();
+        }else if(cursor==head){
+            this.deletefront();
         }
-        else if(cursor == tail){		//basically deleteback
-            tail=tail.prev;
-            tail.next=null;
-            numItems--;
-            cursor=null;
+        else if(cursor == tail){
+            this.deleteback();
         }else{
             Node N = cursor.next;		//remove all pointers to cursor
             Node P = cursor.prev;
@@ -331,11 +312,8 @@ public class List {
         if(numItems!=0){		//delete head by removing pointer to it
         	head.prev=null;
         }
-        else{		//basically clear
-            head =null;
-            tail = null;
-            cursor = null;
-            numItems = 0;
+        else{
+            this.clear();
         }
     }
 
@@ -354,11 +332,8 @@ public class List {
         if(numItems!=0){
         	tail.next=null;		//delete tail by removing pointer to it
         }
-        else{		//basically clear
-            head =null;
-            tail = null;
-            cursor = null;
-            numItems = 0;
+        else{
+        	this.clear();
         }
     }
 
